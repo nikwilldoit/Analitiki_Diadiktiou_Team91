@@ -15,7 +15,7 @@ class PlannerScreen extends StatelessWidget {
         const _TripIntroCard(),
         const SizedBox(height:20),
         GlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-          Row(children:[const Icon(Icons.account_balance_wallet_outlined,color:Palette.mint),const SizedBox(width:9),const Text('Budget per person',style:TextStyle(color:Palette.white,fontWeight:FontWeight.w900)),const Spacer(),Text('€${store.budget}',style:const TextStyle(color:Palette.mint,fontSize:20,fontWeight:FontWeight.w900))]),
+          Row(children:[const Icon(Icons.account_balance_wallet_outlined,color:Palette.mint),const SizedBox(width:9),const Text('Budget per person',style:TextStyle(color:Palette.white,fontWeight:FontWeight.w700)),const Spacer(),Text('€${store.budget}',style:const TextStyle(color:Palette.mint,fontSize:20,fontWeight:FontWeight.w700))]),
           const SizedBox(height:12),
           Slider(value:store.budget.toDouble(),min:300,max:3500,divisions:32,activeColor:Palette.mint,inactiveColor:Palette.outline,label:'€${store.budget}',onChanged:store.setBudget),
           const Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children:[Text('€300',style:TextStyle(color:Palette.muted,fontSize:10)),Text('€3,500',style:TextStyle(color:Palette.muted,fontSize:10))]),
@@ -42,7 +42,7 @@ class PlannerScreen extends StatelessWidget {
         ])),
         const SizedBox(height:13),
         GlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-          Row(children:[const Icon(Icons.timelapse_rounded,color:Palette.mint),const SizedBox(width:10),const Text('How many days?',style:TextStyle(color:Palette.white,fontWeight:FontWeight.w900)),const Spacer(),Text('${store.days} days',style:const TextStyle(color:Palette.mint,fontWeight:FontWeight.w900,fontSize:17))]),
+          Row(children:[const Icon(Icons.timelapse_rounded,color:Palette.mint),const SizedBox(width:10),const Text('How many days?',style:TextStyle(color:Palette.white,fontWeight:FontWeight.w700)),const Spacer(),Text('${store.days} days',style:const TextStyle(color:Palette.mint,fontWeight:FontWeight.w700,fontSize:17))]),
           const SizedBox(height:8),
           Slider(value:store.days.toDouble(),min:3,max:14,divisions:11,label:'${store.days} days',activeColor:Palette.mint,inactiveColor:Palette.outline,onChanged:store.setDays),
         ])),
@@ -77,9 +77,9 @@ class _TripIntroCard extends StatelessWidget {
     decoration:BoxDecoration(borderRadius:BorderRadius.circular(24),gradient:const LinearGradient(colors:[Color(0xFF244653),Color(0xFF203048),Color(0xFF332A50)])),
     child:Row(children:[
       Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-        const Text('ROAM MATCH ENGINE',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1.3,fontWeight:FontWeight.w900)),
+        const Text('ROAM MATCH ENGINE',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1.3,fontWeight:FontWeight.w700)),
         const SizedBox(height:11),
-        const Text('Less searching.\nMore exploring.',style:TextStyle(color:Palette.white,fontSize:24,height:1.15,letterSpacing:-.65,fontWeight:FontWeight.w900)),
+        const Text('Less searching.\nMore exploring.',style:TextStyle(color:Palette.white,fontSize:24,height:1.15,letterSpacing:-.65,fontWeight:FontWeight.w700)),
         const SizedBox(height:10),
         const Text('Your budget + your vibe + your passport = a smarter shortlist.',style:TextStyle(color:Color(0xFFC4D6DD),fontSize:11.5,height:1.5)),
       ])),
@@ -94,7 +94,7 @@ class _FieldLabel extends StatelessWidget {
   final IconData icon;
   const _FieldLabel(this.text,this.icon);
   @override
-  Widget build(BuildContext context)=>Row(children:[Icon(icon,color:Palette.mint,size:18),const SizedBox(width:8),Text(text,style:const TextStyle(color:Palette.white,fontWeight:FontWeight.w900,fontSize:11,letterSpacing:.9))]);
+  Widget build(BuildContext context)=>Row(children:[Icon(icon,color:Palette.mint,size:18),const SizedBox(width:8),Text(text,style:const TextStyle(color:Palette.white,fontWeight:FontWeight.w700,fontSize:11,letterSpacing:.9))]);
 }
 
 class _ResultsSummary extends StatelessWidget {
@@ -105,9 +105,9 @@ class _ResultsSummary extends StatelessWidget {
     padding:const EdgeInsets.all(17),
     decoration:BoxDecoration(borderRadius:BorderRadius.circular(24),gradient:const LinearGradient(colors:[Color(0xFF1C4851),Color(0xFF1A2C48)])),
     child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-      const Row(children:[Icon(Icons.auto_awesome_rounded,color:Palette.mint,size:18),SizedBox(width:7),Text('YOUR TRAVEL BLUEPRINT',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1,fontWeight:FontWeight.w900))]),
+      const Row(children:[Icon(Icons.auto_awesome_rounded,color:Palette.mint,size:18),SizedBox(width:7),Text('YOUR TRAVEL BLUEPRINT',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1,fontWeight:FontWeight.w700))]),
       const SizedBox(height:10),
-      Text('€${store.budget} · ${store.days} days · ${store.companions}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w900)),
+      Text('€${store.budget} · ${store.days} days · ${store.companions}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w700)),
       const SizedBox(height:9),
       Wrap(spacing:8,runSpacing:7,children:[Pill(text:store.region,selected:true),Pill(text:store.vibe.label,color:Palette.orange,selected:true),Pill(text:store.season,color:Palette.purple,selected:true)]),
       const SizedBox(height:11),
@@ -125,14 +125,14 @@ class _TripResultCard extends StatelessWidget {
     final p=result.place;
     final store=RoamScope.of(context);
     return GlassCard(padding:const EdgeInsets.all(12),color:featured?const Color(0xFF1C2D3E):Palette.surface,child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-      if(featured) ...[const Padding(padding:EdgeInsets.only(left:4,bottom:10),child:Row(children:[Icon(Icons.verified_rounded,color:Palette.mint,size:15),SizedBox(width:6),Text('BEST MATCH FOR YOU',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1.1,fontWeight:FontWeight.w900))])),],
+      if(featured) ...[const Padding(padding:EdgeInsets.only(left:4,bottom:10),child:Row(children:[Icon(Icons.verified_rounded,color:Palette.mint,size:15),SizedBox(width:6),Text('BEST MATCH FOR YOU',style:TextStyle(color:Palette.mint,fontSize:10,letterSpacing:1.1,fontWeight:FontWeight.w700))])),],
       GestureDetector(onTap:()=>openPlace(context,p),child:LandscapeArt(place:p,height:featured?176:129)),
       const SizedBox(height:13),
-      Row(children:[Expanded(child:Text('${p.flag} ${p.city}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w900))),Container(padding:const EdgeInsets.symmetric(horizontal:9,vertical:6),decoration:BoxDecoration(color:Palette.mint.withOpacity(.12),borderRadius:BorderRadius.circular(10)),child:Text('${result.match}% match',style:const TextStyle(color:Palette.mint,fontSize:11,fontWeight:FontWeight.w900)))]),
+      Row(children:[Expanded(child:Text('${p.flag} ${p.city}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w700))),Container(padding:const EdgeInsets.symmetric(horizontal:9,vertical:6),decoration:BoxDecoration(color:Palette.mint.withOpacity(.12),borderRadius:BorderRadius.circular(10)),child:Text('${result.match}% match',style:const TextStyle(color:Palette.mint,fontSize:11,fontWeight:FontWeight.w700)))]),
       const SizedBox(height:4),
       Text(result.why,style:const TextStyle(color:Palette.muted,fontSize:11.5)),
       const SizedBox(height:12),
-      Row(children:[const Text('EST. TOTAL',style:TextStyle(color:Palette.muted,fontSize:10,fontWeight:FontWeight.w900,letterSpacing:.7)),const SizedBox(width:9),Text('€${result.estimate}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w900)),const Text(' / person',style:TextStyle(color:Palette.muted,fontSize:10)),const Spacer(),IconButton(onPressed:()=>store.setStamp(p.id,store.status(p.id)==Stamp.wishlist?Stamp.none:Stamp.wishlist),tooltip:'Toggle dream list',icon:Icon(store.status(p.id)==Stamp.wishlist?Icons.favorite_rounded:Icons.favorite_outline_rounded,color:Palette.purple)),IconButton(onPressed:()=>openPlace(context,p),tooltip:'View details',icon:const Icon(Icons.arrow_forward_rounded,color:Palette.mint))]),
+      Row(children:[const Text('EST. TOTAL',style:TextStyle(color:Palette.muted,fontSize:10,fontWeight:FontWeight.w700,letterSpacing:.7)),const SizedBox(width:9),Text('€${result.estimate}',style:const TextStyle(color:Palette.white,fontSize:19,fontWeight:FontWeight.w700)),const Text(' / person',style:TextStyle(color:Palette.muted,fontSize:10)),const Spacer(),IconButton(onPressed:()=>store.setStamp(p.id,store.status(p.id)==Stamp.wishlist?Stamp.none:Stamp.wishlist),tooltip:'Toggle dream list',icon:Icon(store.status(p.id)==Stamp.wishlist?Icons.favorite_rounded:Icons.favorite_outline_rounded,color:Palette.purple)),IconButton(onPressed:()=>openPlace(context,p),tooltip:'View details',icon:const Icon(Icons.arrow_forward_rounded,color:Palette.mint))]),
     ]));
   }
 }

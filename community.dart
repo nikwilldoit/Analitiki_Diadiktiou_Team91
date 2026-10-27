@@ -21,9 +21,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
         decoration:BoxDecoration(borderRadius:BorderRadius.circular(25),gradient:const LinearGradient(colors:[Color(0xFF3E2D4B),Color(0xFF1B3B45)])),
         child:Row(children:[
           const Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-            Text('COLLECT EXPERIENCES',style:TextStyle(color:Palette.orange,fontSize:10,fontWeight:FontWeight.w900,letterSpacing:1.2)),
+            Text('COLLECT EXPERIENCES',style:TextStyle(color:Palette.orange,fontSize:10,fontWeight:FontWeight.w700,letterSpacing:1.2)),
             SizedBox(height:8),
-            Text('Good trips deserve\ngreat stories.',style:TextStyle(color:Palette.white,fontSize:22,fontWeight:FontWeight.w900,height:1.16)),
+            Text('Good trips deserve\ngreat stories.',style:TextStyle(color:Palette.white,fontSize:22,fontWeight:FontWeight.w700,height:1.16)),
             SizedBox(height:8),
             Text('Ask, share, and learn from travellers who have been there.',style:TextStyle(color:Palette.muted,fontSize:11.5)),
           ])),
@@ -55,13 +55,13 @@ class _PostCard extends StatelessWidget {
     final liked=store.likes.contains(post.id);
     return GlassCard(onTap:()=>_openStory(context,post),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
       Row(children:[
-        CircleAvatar(radius:19,backgroundColor:post.color.withOpacity(.20),child:Text(post.initials,style:TextStyle(color:post.color,fontWeight:FontWeight.w900,fontSize:11))),
+        CircleAvatar(radius:19,backgroundColor:post.color.withOpacity(.20),child:Text(post.initials,style:TextStyle(color:post.color,fontWeight:FontWeight.w700,fontSize:11))),
         const SizedBox(width:10),
-        Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(post.name,style:const TextStyle(color:Palette.white,fontSize:12,fontWeight:FontWeight.w900)),const SizedBox(height:3),Text('${post.city} · ${post.when}',style:const TextStyle(color:Palette.muted,fontSize:10.5))])),
+        Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(post.name,style:const TextStyle(color:Palette.white,fontSize:12,fontWeight:FontWeight.w700)),const SizedBox(height:3),Text('${post.city} · ${post.when}',style:const TextStyle(color:Palette.muted,fontSize:10.5))])),
         const Icon(Icons.more_horiz_rounded,color:Palette.muted),
       ]),
       const SizedBox(height:13),
-      Text(post.title,style:const TextStyle(color:Palette.white,fontWeight:FontWeight.w900,fontSize:17,letterSpacing:-.3)),
+      Text(post.title,style:const TextStyle(color:Palette.white,fontWeight:FontWeight.w700,fontSize:17,letterSpacing:-.3)),
       const SizedBox(height:7),
       Text(post.body,maxLines:3,overflow:TextOverflow.ellipsis,style:const TextStyle(color:Palette.muted,height:1.5,fontSize:11.7)),
       const SizedBox(height:12),
@@ -95,7 +95,7 @@ void _openStory(BuildContext context,TravelPost post){
       const SizedBox(height:22),
       ActionButton(text:liked?'Marked helpful ✓':'Mark this story helpful',icon:liked?Icons.favorite_rounded:Icons.favorite_border_rounded,onTap:()=>store.toggleLike(post.id),filled:!liked),
       const SizedBox(height:23),
-      const Text('COMMUNITY CONVERSATION',style:TextStyle(color:Palette.mint,fontWeight:FontWeight.w900,fontSize:10,letterSpacing:1.2)),
+      const Text('COMMUNITY CONVERSATION',style:TextStyle(color:Palette.mint,fontWeight:FontWeight.w700,fontSize:10,letterSpacing:1.2)),
       const SizedBox(height:10),
       const GlassCard(color:Palette.raised,child:Row(children:[Icon(Icons.forum_outlined,color:Palette.purple),SizedBox(width:12),Expanded(child:Text('Comments and verified traveller discussions will be added in a future version.',style:TextStyle(color:Palette.muted,fontSize:12,height:1.45)))])),
     ])));

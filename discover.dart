@@ -39,7 +39,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       Row(children:[
         const Icon(Icons.favorite_rounded,color:Palette.purple,size:18),
         const SizedBox(width:8),
-        const Expanded(child:Text('My dream list only',style:TextStyle(fontSize:12.5,fontWeight:FontWeight.w800))),
+        const Expanded(child:Text('My dream list only',style:TextStyle(fontSize:12.5,fontWeight:FontWeight.w600))),
         Switch(value:dreamOnly,activeColor:Palette.mint,onChanged:(v)=>setState(()=>dreamOnly=v)),
       ]),
       const SizedBox(height:14),
@@ -48,11 +48,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           padding:const EdgeInsets.all(17),
           decoration:BoxDecoration(borderRadius:BorderRadius.circular(25),gradient:const LinearGradient(colors:[Color(0xFF2D334E),Color(0xFF1D3545)]),border:Border.all(color:const Color(0xFF3A4C61))),
           child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-            Row(children:[const Icon(Icons.auto_awesome_rounded,color:Palette.orange,size:17),const SizedBox(width:6),const Text('DESTINATION SPOTLIGHT',style:TextStyle(color:Palette.orange,fontWeight:FontWeight.w900,letterSpacing:1.2,fontSize:10)),const Spacer(),const Text('✦ EDITOR’S PICK',style:TextStyle(color:Palette.muted,fontSize:9))]),
+            Row(children:[const Icon(Icons.auto_awesome_rounded,color:Palette.orange,size:17),const SizedBox(width:6),const Text('DESTINATION SPOTLIGHT',style:TextStyle(color:Palette.orange,fontWeight:FontWeight.w700,letterSpacing:1.2,fontSize:10)),const Spacer(),const Text('✦ EDITOR’S PICK',style:TextStyle(color:Palette.muted,fontSize:9))]),
             const SizedBox(height:12),
             GestureDetector(onTap:()=>openPlace(context,DemoData.places[6]),child:LandscapeArt(place:DemoData.places[6],height:200)),
             const SizedBox(height:12),
-            const Text('Temples, lanterns and quiet mornings',style:TextStyle(color:Palette.white,fontSize:17,fontWeight:FontWeight.w900)),
+            const Text('Temples, lanterns and quiet mornings',style:TextStyle(color:Palette.white,fontSize:17,fontWeight:FontWeight.w700)),
             const SizedBox(height:6),
             const Text('A fresh favourite for culture seekers and slow travellers.',style:TextStyle(color:Palette.muted,fontSize:12)),
             const SizedBox(height:13),
@@ -63,7 +63,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       ],
       Row(children:[Expanded(child:Text(dreamOnly?'Your dream destinations':'Explore destinations',style:Theme.of(context).textTheme.titleLarge)),Text('${list.length} places',style:const TextStyle(color:Palette.muted,fontSize:11))]),
       const SizedBox(height:13),
-      if(list.isEmpty) const GlassCard(child:Column(children:[Icon(Icons.travel_explore_rounded,size:32,color:Palette.muted),SizedBox(height:9),Text('No destinations found',style:TextStyle(fontWeight:FontWeight.w800)),SizedBox(height:4),Text('Try another region or clear your search.',style:TextStyle(color:Palette.muted,fontSize:11))])),
+      if(list.isEmpty) const GlassCard(child:Column(children:[Icon(Icons.travel_explore_rounded,size:32,color:Palette.muted),SizedBox(height:9),Text('No destinations found',style:TextStyle(fontWeight:FontWeight.w600)),SizedBox(height:4),Text('Try another region or clear your search.',style:TextStyle(color:Palette.muted,fontSize:11))])),
       ...list.map((p)=>Padding(padding:const EdgeInsets.only(bottom:10),child:PlaceCard(place:p))),
       const SizedBox(height:15),
       GlassCard(color:const Color(0xFF1B2B3F),child:Row(children:[

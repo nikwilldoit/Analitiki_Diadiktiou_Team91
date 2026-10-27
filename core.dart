@@ -139,7 +139,7 @@ class RoamStore extends ChangeNotifier {
   int get visitedCount => stamps.values.where((s) => s == Stamp.visited).length;
   int get wishedCount => stamps.values.where((s) => s == Stamp.wishlist).length;
   int get plannedCount => stamps.values.where((s) => s == Stamp.planned).length;
-  int get continentsVisited => DemoData.places.where((p) => status(p.id) == Stamp.visited).map((p) => p.region).toSet().length;
+  int get continentsVisited => GeoWorld.countries.where((c) => status(c.id) == Stamp.visited).map((c) => c.continent).toSet().length;
 
   void setStamp(String id, Stamp stamp) {
     if (stamp == Stamp.none) { stamps.remove(id); } else { stamps[id] = stamp; }

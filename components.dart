@@ -23,7 +23,7 @@ class SectionHeading extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label.toUpperCase(), style: const TextStyle(color: Palette.mint, fontSize: 10, letterSpacing: 2, fontWeight: FontWeight.w900)),
+      Text(label.toUpperCase(), style: const TextStyle(color: Palette.mint, fontSize: 10, letterSpacing: 2, fontWeight: FontWeight.w700)),
       const SizedBox(height: 6),
       Row(children: [Expanded(child: Text(title, style: Theme.of(context).textTheme.headlineMedium)), if (trailing != null) trailing!]),
       if (subtitle != null) ...[const SizedBox(height: 6), Text(subtitle!, style: const TextStyle(color: Palette.muted, height: 1.45, fontSize: 12.5))],
@@ -73,7 +73,7 @@ class Pill extends StatelessWidget {
       ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         if (icon != null) ...[Icon(icon, size: 15, color: selected ? color : Palette.muted), const SizedBox(width: 6)],
-        Text(text, style: TextStyle(fontSize: 11.5, color: selected ? color : Palette.white, fontWeight: FontWeight.w800)),
+        Text(text, style: TextStyle(fontSize: 11.5, color: selected ? color : Palette.white, fontWeight: FontWeight.w600)),
       ]),
     ),
   );
@@ -92,7 +92,7 @@ class ActionButton extends StatelessWidget {
     child: FilledButton.icon(
       onPressed: onTap,
       icon: Icon(icon, size: 18),
-      label: Text(text, style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: .15)),
+      label: Text(text, style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: .15)),
       style: FilledButton.styleFrom(
         backgroundColor: filled ? Palette.mint : Palette.raised,
         foregroundColor: filled ? Palette.bg : Palette.white,
@@ -113,7 +113,7 @@ class StatBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 7),
       decoration: BoxDecoration(color: Palette.raised, borderRadius: BorderRadius.circular(18)),
       child: Column(children: [
-        Text(number, style: TextStyle(color: color, fontSize: 25, fontWeight: FontWeight.w900, letterSpacing: -1)),
+        Text(number, style: TextStyle(color: color, fontSize: 25, fontWeight: FontWeight.w700, letterSpacing: -1)),
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(color: Palette.muted, fontSize: 10.5, fontWeight: FontWeight.w700)),
       ]),
@@ -137,10 +137,10 @@ class LandscapeArt extends StatelessWidget {
         Positioned(top: 12, left: 12, child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           decoration: BoxDecoration(color: Palette.bg.withOpacity(.58), borderRadius: BorderRadius.circular(99)),
-          child: Text('${place.flag} ${place.country}', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)),
+          child: Text('${place.flag} ${place.country}', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
         )),
         if (caption) Positioned(left: 16, bottom: 13, right: 12, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(place.city, style: const TextStyle(fontSize: 24, letterSpacing: -.8, fontWeight: FontWeight.w900, color: Colors.white)),
+          Text(place.city, style: const TextStyle(fontSize: 24, letterSpacing: -.8, fontWeight: FontWeight.w700, color: Colors.white)),
           Text(place.highlight, style: const TextStyle(color: Color(0xFFECF4F3), fontWeight: FontWeight.w600, fontSize: 11)),
         ])),
       ]),
@@ -197,12 +197,12 @@ class PlaceCard extends StatelessWidget {
         SizedBox(width: 112, child: LandscapeArt(place: place, height: 103, caption: false)),
         const SizedBox(width: 13),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('${place.flag} ${place.city}', style: const TextStyle(color: Palette.white,fontWeight: FontWeight.w900,fontSize: 17)),
+          Text('${place.flag} ${place.city}', style: const TextStyle(color: Palette.white,fontWeight: FontWeight.w700,fontSize: 17)),
           const SizedBox(height: 4),
           Text(place.highlight, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Palette.muted,fontSize: 11)),
           const SizedBox(height: 9),
-          if(detail!=null) Text(detail!,style:const TextStyle(color:Palette.mint,fontSize:11,fontWeight:FontWeight.w800))
-          else Text(stampLabel(stamp),style:TextStyle(color:stampColor(stamp),fontSize:11,fontWeight:FontWeight.w800)),
+          if(detail!=null) Text(detail!,style:const TextStyle(color:Palette.mint,fontSize:11,fontWeight:FontWeight.w600))
+          else Text(stampLabel(stamp),style:TextStyle(color:stampColor(stamp),fontSize:11,fontWeight:FontWeight.w600)),
         ])),
         const Icon(Icons.chevron_right_rounded,color:Palette.muted),
       ]),
@@ -234,7 +234,7 @@ void openPlace(BuildContext context, Destination place) {
           const SizedBox(height: 7),
           Text(place.description,style:const TextStyle(color:Palette.muted,height:1.5)),
           const SizedBox(height: 18),
-          const Text('ADD TO YOUR WORLD',style:TextStyle(color:Palette.mint,letterSpacing:1.3,fontSize:10,fontWeight:FontWeight.w900)),
+          const Text('ADD TO YOUR WORLD',style:TextStyle(color:Palette.mint,letterSpacing:1.3,fontSize:10,fontWeight:FontWeight.w700)),
           const SizedBox(height: 9),
           Wrap(spacing:8,runSpacing:8,children:[
             Pill(text:'Visited',icon:Icons.check_circle_outline,color:Palette.mint,selected:store.status(place.id)==Stamp.visited,onTap:()=>store.setStamp(place.id,Stamp.visited)),
