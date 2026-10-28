@@ -74,7 +74,15 @@ class TripPick {
   final int estimate;
   final int match;
   final String why;
-  const TripPick(this.place, this.estimate, this.match, this.why);
+  final List<String> reasons;
+  final int preferenceFit;
+  final int affordabilityFit;
+  final int historyFit;
+  const TripPick(this.place, this.estimate, this.match, this.why,
+      {this.reasons = const [],
+      this.preferenceFit = 0,
+      this.affordabilityFit = 0,
+      this.historyFit = 0});
 }
 
 class TravelPost {
@@ -126,6 +134,9 @@ class RoamStore extends ChangeNotifier {
     'no': Stamp.wishlist, 'th': Stamp.planned,
   };
   final Set<String> likes = {};
+  // Demo feedback for the travel recommender, separate from community likes.
+  // +1 = more like this, -1 = not interested, 0 = no feedback.
+  final Map<String, int> tripFeedback = {};
   final List<TravelPost> customPosts = [];
   int budget = 1100;
   int days = 6;
@@ -156,8 +167,49 @@ class RoamStore extends ChangeNotifier {
   void toggleLike(String id) { likes.contains(id) ? likes.remove(id) : likes.add(id); notifyListeners(); }
   void addPost(TravelPost post) { customPosts.insert(0, post); notifyListeners(); }
 
+  void reactToTrip(String destinationId, bool interested) {
+    final next = interested ? 1 : -1;
+    // Repeat the action to undo it, just like a toggle in a prototype.
+    if (tripFeedback[destinationId] == next) {
+      tripFeedback.remove(destinationId);
+    } else {
+      tripFeedback[destinationId] = next;
+    }
+    notifyListeners();
+  }
+
+  void clearTripFeedback() {
+    tripFeedback.clear();
+    notifyListeners();
+  }
+
+  int get positiveTripSignals => tripFeedback.values.where((v) => v == 1).length;
+
+  // Content-based profile derived from previous travels, saved places and
+  // explicit thumbs-up actions. This is deterministic mock recommendation logic.
+  Map<TravelVibe, double> get inferredInterests {
+    final scores = {for (final v in TravelVibe.values) v: 0.0};
+    for (final place in DemoData.places) {
+      if (status(place.id) == Stamp.visited) scores[place.vibe] = scores[place.vibe]! + 1.0;
+      if (status(place.id) == Stamp.wishlist) scores[place.vibe] = scores[place.vibe]! + 1.5;
+      if (status(place.id) == Stamp.planned) scores[place.vibe] = scores[place.vibe]! + .8;
+      if (tripFeedback[place.id] == 1) scores[place.vibe] = scores[place.vibe]! + 2.5;
+      if (tripFeedback[place.id] == -1) scores[place.vibe] = scores[place.vibe]! - 1.0;
+    }
+    return scores;
+  }
+
+  TravelVibe get topTravelInterest {
+    final interest = inferredInterests;
+    final sorted = TravelVibe.values.toList()
+      ..sort((a, b) => interest[b]!.compareTo(interest[a]!));
+    return sorted.first;
+  }
+
   List<TripPick> get recommendations {
-    final options = DemoData.places.where((p) => region == 'Anywhere' || p.region == region).toList();
+    final options = DemoData.places.where(
+      (p) => (region == 'Anywhere' || p.region == region) && tripFeedback[p.id] != -1,
+    ).toList();
     final seasonal = switch (season) {
       'Spring' => <String>{'jp','it','pt','es'},
       'Summer' => <String>{'gr','es','pt','id'},
@@ -171,19 +223,52 @@ class RoamStore extends ChangeNotifier {
       'Family' => <String>{'ca','ch','gr','it'},
       _ => <String>{'jp','pt','vn','th'},
     };
+    final history = inferredInterests;
+    final maxHistory = history.values.fold<double>(1, (a, b) => math.max(a, b));
     final results = options.map((p) {
       final estimated = p.flightEstimate + p.dailyEstimate * days;
-      final afford = estimated <= budget;
+      final priceDifference = estimated - budget;
+      final affordable = priceDifference <= 0;
       final vibeMatch = p.vibe == vibe;
       final wished = status(p.id) == Stamp.wishlist;
+      final planned = status(p.id) == Stamp.planned;
       final visited = status(p.id) == Stamp.visited;
-      final budgetGap = ((estimated - budget).clamp(0, 2000) / 50).round();
-      final score = (64 + (vibeMatch ? 18 : 0) + (wished ? 10 : 0) + (afford ? 12 : 0) + (seasonal.contains(p.id) ? 5 : 0) + (groupFit.contains(p.id) ? 4 : 0) - (visited ? 8 : 0) - budgetGap).clamp(40, 98).toInt();
-      final why = wished ? 'On your dream list · ${p.highlight}' : vibeMatch ? 'Matches your ${vibe.label.toLowerCase()} style' : afford ? 'Fits your budget · ${p.highlight}' : '${p.highlight} · stretch option';
-      return TripPick(p, estimated, score, why);
-    }).toList()..sort((a,b) => b.match.compareTo(a.match));
+      final liked = tripFeedback[p.id] == 1;
+      final historyScore = ((history[p.vibe]! / maxHistory) * 15).round().clamp(0, 15);
+      final preferenceScore = vibeMatch ? 23 : 0;
+      final affordabilityScore = affordable ? 16 : (10 - (priceDifference / 75).round()).clamp(0, 10);
+      final savedScore = wished ? 15 : planned ? 7 : 0;
+      final seasonalScore = seasonal.contains(p.id) ? 5 : 0;
+      final companyScore = groupFit.contains(p.id) ? 5 : 0;
+      final feedbackScore = liked ? 13 : 0;
+      final repeatPenalty = visited ? 13 : 0;
+      final score = (34 + preferenceScore + affordabilityScore + historyScore +
+          savedScore + seasonalScore + companyScore + feedbackScore - repeatPenalty)
+          .clamp(35, 98).toInt();
+      final reasons = <String>[];
+      if (wished) reasons.add('On your dream list');
+      if (planned) reasons.add('Already in your plans');
+      if (liked) reasons.add('You asked for more like this');
+      if (vibeMatch) reasons.add('Matches ${vibe.label.toLowerCase()}');
+      if (historyScore >= 8) reasons.add('Inspired by your passport');
+      if (affordable) reasons.add('Within your budget');
+      if (seasonalScore > 0) reasons.add('Season fit');
+      if (companyScore > 0) reasons.add('Good for ${companions.toLowerCase()}');
+      if (reasons.isEmpty) reasons.add(p.highlight);
+      final why = reasons.take(2).join(' · ');
+      return TripPick(p, estimated, score, why,
+        reasons: reasons,
+        preferenceFit: preferenceScore,
+        affordabilityFit: affordabilityScore,
+        historyFit: historyScore);
+    }).toList()
+      ..sort((a, b) {
+        final scoreOrder = b.match.compareTo(a.match);
+        return scoreOrder != 0 ? scoreOrder : a.place.city.compareTo(b.place.city);
+      });
     return results.take(5).toList();
   }
+
 }
 
 class RoamScope extends InheritedNotifier<RoamStore> {
