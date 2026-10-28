@@ -65,7 +65,11 @@ flutter pub get
 
 ## Features Overview
 
-1. **Passport (`passport.dart`):** Custom Canvas interactive world & Europe map highlighting visited, wishlisted, and planned destinations with visual stats.
-2. **Discover (`discover.dart`):** Filterable destination grid with custom canvas artwork generation.
-3. **Plan Trip (`planner.dart`):** Recommendation engine calculating budget, travel vibe, trip duration, and group style.
-4. **Community (`community.dart`):** Interactive feed allowing users to publish session-based travel stories.
+1. **Passport (`passport.dart`):** Custom Canvas interactive world & Europe map highlighting visited, wishlisted, and planned destinations with visual stats. <img width="397" height="883" alt="image" src="https://github.com/user-attachments/assets/c5c25c7a-f4cb-498e-877f-604c20f60920" />
+
+2. **Discover (`discover.dart`):** Filterable destination grid with custom canvas artwork generation. <img width="396" height="884" alt="image" src="https://github.com/user-attachments/assets/1d4032a6-17ba-45fc-b7d7-b772ff88235e" />
+
+3. **Plan Trip (`planner.dart`):** Recommendation engine calculating budget, travel vibe, trip duration, and group style. <img width="397" height="886" alt="image" src="https://github.com/user-attachments/assets/275a11f1-18b2-4427-ad33-872cb0e3446d" />
+
+4. **Community (`community.dart`):** Interactive feed allowing users to publish session-based travel stories. <img width="397" height="888" alt="image" src="https://github.com/user-attachments/assets/bbc10248-b079-4087-ae0f-ac1a609d1024" />
+
