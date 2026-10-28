@@ -88,7 +88,15 @@ class _RoamShellState extends State<RoamShell> {
             boxShadow: [BoxShadow(color: Color(0x77000000), blurRadius: 45)],
           ),
           child: Scaffold(
-            body: IndexedStack(index: page, children: pages),
+            body: Stack(children: [
+              IndexedStack(index: page, children: pages),
+              Positioned(
+                right: 16, bottom: 17,
+                child: RoamCopilotLauncher(
+                  onSeeMatches: () => goTo(2),
+                ),
+              ),
+            ]),
             bottomNavigationBar: Container(
               decoration: const BoxDecoration(
                 color: Palette.surface,

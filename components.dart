@@ -261,3 +261,233 @@ class MiniDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Divider(color: Palette.outline, height: 1));
 }
+
+
+// PART A / ROAM COPILOT: conversational interactive preview.
+// No remote LLM, flights API or external packages. Guided actions update
+// the same RoamStore used by Plan Trip, so the prototype behaves coherently.
+class RoamCopilotLauncher extends StatelessWidget {
+  final VoidCallback onSeeMatches;
+  const RoamCopilotLauncher({super.key, required this.onSeeMatches});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () => showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => RoamCopilotSheet(onSeeMatches: onSeeMatches),
+        ),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(14, 12, 16, 12),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(colors: [Color(0xFF62E8C1), Color(0xFF83D9EE)]),
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: [BoxShadow(color: Palette.mint.withOpacity(.25), blurRadius: 24, offset: const Offset(0, 9))],
+          ),
+          child: const Row(mainAxisSize: MainAxisSize.min, children: [
+            Icon(Icons.auto_awesome_rounded, color: Color(0xFF102233), size: 20),
+            SizedBox(width: 8),
+            Text('Ask ROAM', style: TextStyle(color: Color(0xFF102233), fontSize: 12, fontWeight: FontWeight.w800)),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class _CopilotMessage {
+  final bool fromUser;
+  final String body;
+  const _CopilotMessage(this.fromUser, this.body);
+}
+
+class RoamCopilotSheet extends StatefulWidget {
+  final VoidCallback onSeeMatches;
+  const RoamCopilotSheet({super.key, required this.onSeeMatches});
+  @override
+  State<RoamCopilotSheet> createState() => _RoamCopilotSheetState();
+}
+
+class _RoamCopilotSheetState extends State<RoamCopilotSheet> {
+  final TextEditingController input = TextEditingController();
+  final ScrollController scroll = ScrollController();
+  final List<_CopilotMessage> messages = [
+    const _CopilotMessage(false, 'Hey, explorer! ✨ I can help you turn your travel dreams into a plan. What are you in the mood for?'),
+  ];
+  bool showMatches = false;
+
+  @override
+  void dispose() { input.dispose(); scroll.dispose(); super.dispose(); }
+
+  void _talk(String question, String answer, {VoidCallback? action, bool matches = false}) {
+    action?.call();
+    setState(() {
+      messages.add(_CopilotMessage(true, question));
+      messages.add(_CopilotMessage(false, answer));
+      showMatches = matches;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scroll.hasClients) scroll.animateTo(scroll.position.maxScrollExtent, duration: const Duration(milliseconds: 280), curve: Curves.easeOut);
+    });
+  }
+
+  void _handleText() {
+    final text = input.text.trim();
+    if (text.isEmpty) return;
+    input.clear();
+    final store = RoamScope.of(context);
+    final q = text.toLowerCase();
+    if (q.contains('budget') || q.contains('cheap') || q.contains('€') || q.contains('affordable')) {
+      _talk(text, 'We can optimize for your budget. Right now it is €${store.budget} per person. Try a quick budget below or open your personalized matches.');
+    } else if (q.contains('beach') || q.contains('relax') || q.contains('sea')) {
+      _talk(text, 'A relaxed escape sounds perfect. I’ve selected Relax as your travel style, so your matches will lean toward laid-back destinations.', action: () => store.setVibe(TravelVibe.relaxing), matches: true);
+    } else if (q.contains('food') || q.contains('eat')) {
+      _talk(text, 'Food-first trip? Love that. I’ve set your vibe to Foodie. Your ranked recommendations will now reflect that.', action: () => store.setVibe(TravelVibe.food), matches: true);
+    } else if (q.contains('culture') || q.contains('museum') || q.contains('city')) {
+      _talk(text, 'Let’s discover cultural gems. I’ve adjusted your vibe to Culture — check your updated travel matches.', action: () => store.setVibe(TravelVibe.culture), matches: true);
+    } else if (q.contains('adventure') || q.contains('hike') || q.contains('nature')) {
+      _talk(text, 'Adventure mode activated! I’ll prioritize outdoor destinations in your personalized results.', action: () => store.setVibe(TravelVibe.adventure), matches: true);
+    } else {
+      _talk(text, 'I’m a guided AI-assistant preview for Part A, not a live chatbot yet. Choose one of the interactive ideas below and I’ll adjust your trip recommendations.');
+    }
+  }
+
+  Widget _chip(String text, IconData icon, VoidCallback onTap) {
+    return ActionChip(
+      onPressed: onTap,
+      avatar: Icon(icon, color: Palette.mint, size: 16),
+      label: Text(text, style: const TextStyle(color: Palette.white, fontSize: 11, fontWeight: FontWeight.w600)),
+      backgroundColor: Palette.raised,
+      side: const BorderSide(color: Palette.outline),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final store = RoamScope.of(context);
+    final matches = store.recommendations;
+    final height = MediaQuery.of(context).size.height * .82;
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          height: height,
+          decoration: const BoxDecoration(
+            color: Palette.bg,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+            border: Border(top: BorderSide(color: Palette.outline)),
+          ),
+          child: Column(children: [
+            Container(width: 38, height: 4, margin: const EdgeInsets.only(top: 11, bottom: 13), decoration: BoxDecoration(color: Palette.outline, borderRadius: BorderRadius.circular(8))),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 2, 12, 14),
+              child: Row(children: [
+                Container(padding: const EdgeInsets.all(11), decoration: BoxDecoration(color: Palette.mint.withOpacity(.14), borderRadius: BorderRadius.circular(15)), child: const Icon(Icons.auto_awesome_rounded, color: Palette.mint)),
+                const SizedBox(width: 11),
+                const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('ROAM Copilot', style: TextStyle(color: Palette.white, fontSize: 18, fontWeight: FontWeight.w800)),
+                  SizedBox(height: 3),
+                  Text('Personal travel companion · Interactive demo', style: TextStyle(color: Palette.muted, fontSize: 10.5)),
+                ])),
+                IconButton(icon: const Icon(Icons.close_rounded, color: Palette.muted), onPressed: () => Navigator.pop(context)),
+              ]),
+            ),
+            const Divider(height: 1, color: Palette.outline),
+            Expanded(child: ListView(
+              controller: scroll,
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+              children: [
+                Row(children: [
+                  const Icon(Icons.fingerprint_rounded, size: 16, color: Palette.purple),
+                  const SizedBox(width: 7),
+                  Expanded(child: Text('Your Travel DNA: ${store.topTravelInterest.label} · ${store.wishedCount} dream places · €${store.budget} budget',
+                    style: const TextStyle(color: Palette.muted, fontSize: 11))),
+                ]),
+                const SizedBox(height: 18),
+                ...messages.map((m) => Align(
+                  alignment: m.fromUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 320),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: m.fromUser ? Palette.mint.withOpacity(.16) : Palette.surface,
+                      border: Border.all(color: m.fromUser ? Palette.mint.withOpacity(.3) : Palette.outline),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Text(m.body, style: const TextStyle(color: Palette.white, height: 1.45, fontSize: 12.5)),
+                  ),
+                )),
+                if (showMatches && matches.isNotEmpty) ...[
+                  const Padding(padding: EdgeInsets.only(bottom: 9), child: Text('CURATED FOR YOU', style: TextStyle(color: Palette.mint, fontWeight: FontWeight.w700, letterSpacing: 1, fontSize: 10))),
+                  ...matches.take(2).map((p) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: InkWell(
+                      onTap: () { Navigator.pop(context); widget.onSeeMatches(); store.generate(); },
+                      borderRadius: BorderRadius.circular(17),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(color: Palette.raised, borderRadius: BorderRadius.circular(17), border: Border.all(color: Palette.outline)),
+                        child: Row(children: [
+                          Text(p.place.flag, style: const TextStyle(fontSize: 25)),
+                          const SizedBox(width: 11),
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text('${p.place.city}, ${p.place.country}', style: const TextStyle(color: Palette.white, fontWeight: FontWeight.w700, fontSize: 13)),
+                            const SizedBox(height: 3),
+                            Text(p.why, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Palette.muted, fontSize: 10)),
+                          ])),
+                          Column(children: [Text('${p.match}%', style: const TextStyle(color: Palette.mint, fontSize: 18, fontWeight: FontWeight.w800)), const Text('mock match', style: TextStyle(color: Palette.muted, fontSize: 9))]),
+                        ]),
+                      ),
+                    ),
+                  )),
+                ],
+                const SizedBox(height: 7),
+                const Text('EXPLORE AN IDEA', style: TextStyle(color: Palette.muted, letterSpacing: 1, fontWeight: FontWeight.w700, fontSize: 10)),
+                const SizedBox(height: 9),
+                Wrap(spacing: 7, runSpacing: 4, children: [
+                  _chip('Surprise me', Icons.shuffle_rounded, () => _talk('Surprise me!', 'Based on your Travel DNA and saved places, here are two destinations to explore. Tap one to see your full ranked trip feed.', matches: true)),
+                  _chip('Nature & adventure', Icons.terrain_rounded, () => _talk('I want an adventure', 'Adventure mode on. I’ve updated your travel style and refreshed your personalized destination matches.', action: () => store.setVibe(TravelVibe.adventure), matches: true)),
+                  _chip('Culture & cities', Icons.museum_outlined, () => _talk('Show cultural city breaks', 'Culture it is! I’ve updated your preferred style. Here are some matching ideas.', action: () => store.setVibe(TravelVibe.culture), matches: true)),
+                  _chip('Beach escape', Icons.beach_access_rounded, () => _talk('I need a beach escape', 'Relax mode selected. These destinations are now ranked using your updated travel vibe.', action: () => store.setVibe(TravelVibe.relaxing), matches: true)),
+                  _chip('Under €800', Icons.wallet_outlined, () => _talk('Trips under €800', 'Done — I’ve set your trip budget to €800 per person. These are the closest matches from our demo destinations.', action: () => store.setBudget(800), matches: true)),
+                  _chip('My travel DNA', Icons.fingerprint_rounded, () => _talk('What do you know about me?', 'Your strongest inferred interest is ${store.topTravelInterest.label}. You have ${store.visitedCount} visited countries and ${store.wishedCount} wishlist countries. This influences your trip ranking.')),
+                ]),
+              ],
+            )),
+            const Divider(height: 1, color: Palette.outline),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 11, 14, 14),
+              child: Row(children: [
+                Expanded(child: TextField(
+                  controller: input,
+                  style: const TextStyle(color: Palette.white, fontSize: 13),
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => _handleText(),
+                  decoration: InputDecoration(
+                    hintText: 'Ask about your next escape...',
+                    hintStyle: const TextStyle(color: Palette.muted, fontSize: 12),
+                    filled: true, fillColor: Palette.surface,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Palette.outline)),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Palette.outline)),
+                  ),
+                )),
+                const SizedBox(width: 9),
+                IconButton.filled(onPressed: _handleText, style: IconButton.styleFrom(backgroundColor: Palette.mint, foregroundColor: Palette.bg), icon: const Icon(Icons.arrow_upward_rounded)),
+              ]),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
