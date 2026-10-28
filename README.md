@@ -69,6 +69,6 @@ flutter pub get
 
 2. **Discover (`discover.dart`):** Filterable destination grid with custom canvas artwork generation. <img width="381" height="855" alt="image" src="https://github.com/user-attachments/assets/2e2d360f-2e06-4cd5-9d9f-60f3c75395d6" />
 
-3. **Plan Trip (`planner.dart`):** Recommendation engine calculating budget, travel vibe, trip duration, and group style. <img width="383" height="858" alt="image" src="https://github.com/user-attachments/assets/f032144e-8c93-407f-afc2-3b0e766bf4e2" />
+3. **Plan Trip (`planner.dart`):** Recommendation engine calculating budget, travel vibe, trip duration, and group style. <img width="383" height="858" alt="image" src="https://github.com/user-attachments/assets/f032144e-8c93-407f-afc2-3b0e766bf4e2" />  <img width="382" height="714" alt="image" src="https://github.com/user-attachments/assets/68b4892c-4c5f-4cb9-ac1d-00e321f3d16e" />
 
 4. **Community (`community.dart`):** Interactive feed allowing users to publish session-based travel stories. <img width="381" height="858" alt="image" src="https://github.com/user-attachments/assets/ea68cfb4-0df4-4f81-b642-fc9a54907a6a" />
