@@ -1,74 +1,390 @@
-# ROAM Travel App Prototype
+# ROAM - Travel App Prototype
 
-ROAM is a Flutter application designed for interactive travel tracking, trip planning based on budget/vibe, destination discovery, and community sharing.
+ROAM is a Flutter application designed for interactive travel tracking, trip planning based on budget and travel preferences, destination discovery, and community sharing.
+
+This repository contains the Dart source code for the application.
+
+**Important:** The repository currently contains only the application's `.dart` files, not a complete Flutter project. Follow the instructions below to install Flutter, generate the required project structure, and run the application.
 
 ---
 
-## Project Structure
+## 1. Prerequisites
 
-Ensure all source files are located inside the `lib/` directory as shown below:
+Before running the application, make sure you have:
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Git](https://git-scm.com/downloads)
+- [Google Chrome](https://www.google.com/chrome/)
+- Flutter SDK (installation instructions below)
+
+**Recommended platform: Web (Google Chrome).**
+
+Using Chrome is the easiest way to test the application without installing Android Studio, Android emulators, or additional mobile development tools.
+
+### Flutter and Dart
+
+Flutter includes the Dart SDK, so **you do not need to install Dart separately**.
+
+The recommended installation method is through Visual Studio Code.
+
+---
+
+## 2. Install Flutter and Dart
+
+### Step 1 — Install VS Code
+
+Download and install Visual Studio Code:
+
+https://code.visualstudio.com/
+
+### Step 2 — Install the Flutter extension
+
+1. Open VS Code.
+2. Navigate to the **Extensions** tab (`Ctrl + Shift + X` on Windows/Linux or `Cmd + Shift + X` on macOS).
+3. Search for **Flutter**.
+4. Install the official Flutter extension.
+
+The Dart extension will be installed automatically.
+
+### Step 3 — Download the Flutter SDK
+
+1. Open the VS Code Command Palette:
+   - Windows/Linux: `Ctrl + Shift + P`
+   - macOS: `Cmd + Shift + P`
+2. Search for `Flutter: New Project`.
+3. If Flutter is not installed, select **Download SDK**.
+4. Choose a folder where Flutter should be installed.
+5. Select **Clone Flutter**.
+6. When installation finishes, select **Add SDK to PATH**.
+7. Restart VS Code and your terminal.
+
+For additional help, follow the official installation guide:
+
+https://docs.flutter.dev/install/with-vs-code
+
+### Step 4 — Verify installation
+
+Open a new terminal and execute:
+
+```bash
+flutter --version
+```
+
+```bash
+dart --version
+```
+
+Both commands should display installed version information.
+
+Next, run:
+
+```bash
+flutter doctor
+```
+
+This checks whether your development environment is correctly configured.
+
+**Note:** Warnings related to Android Studio, Xcode, or desktop development tools can be ignored if you only intend to run the application in Chrome.
+
+Make sure Flutter and Chrome are correctly detected.
+
+---
+
+## 3. Clone the Repository
+
+Open a terminal and execute:
+
+```bash
+git clone https://github.com/nikwilldoit/Analitiki_Diadiktiou_Team91.git
+```
+
+Navigate to the repository:
+
+```bash
+cd Analitiki_Diadiktiou_Team91
+```
+
+Alternatively, download the repository as a ZIP file from GitHub, extract it, and open the extracted folder in VS Code.
+
+**Note:** This repository is private, so GitHub access is required.
+
+---
+
+## 4. Generate the Flutter Project Structure
+
+The GitHub repository currently contains only the following source files:
 
 ```text
-roam_app/
-└── lib/
-    ├── main.dart
-    ├── core.dart
-    ├── components.dart
-    ├── passport.dart
-    ├── discover.dart
-    ├── planner.dart
-    └── community.dart
+Analitiki_Diadiktiou_Team91/
+├── README.md
+├── main.dart
+├── core.dart
+├── components.dart
+├── passport.dart
+├── discover.dart
+├── planner.dart
+└── community.dart
 ```
 
----
+A complete Flutter project requires additional configuration files and directories.
 
-## Requirements
+Fortunately, Flutter can generate these automatically.
 
-- **Flutter SDK**: `^3.0.0` or higher
-- **Dart SDK**: `^3.0.0` or higher
-- Any supported platform target: **Web (Chrome)**, **macOS**, **Windows**, **Linux**, **Android Emulator**, or **iOS Simulator**.
+### Step 1 — Generate the missing files
 
----
+Inside the repository's root directory, run:
 
-## How to Run
-
-### 1. Extract / Navigate to Project
-Open your terminal inside the project root directory:
 ```bash
-cd roam_app
+flutter create --project-name roam_app --platforms web .
 ```
 
-### 2. Fetch Dependencies
-Install the required packages (uses standard Flutter Material libraries):
+**Important:** Include the final dot (`.`). It tells Flutter to generate the project files inside the current directory.
+
+This command creates the missing Flutter configuration, including:
+
+- `pubspec.yaml` — project dependencies and configuration
+- `lib/` — application source code
+- `web/` — files required for running in Chrome
+- `.dart_tool/` and other generated development files
+
+The `--project-name roam_app` option ensures that the generated Flutter project has a valid Dart package name.
+
+The `--platforms web` option generates only the web target, keeping the initial setup simple.
+
+### Step 2 — Move the existing Dart files into `lib/`
+
+After running the previous command, Flutter creates a `lib` directory containing a default `main.dart`.
+
+**Replace that generated `main.dart` with the one from the repository.**
+
+Move all seven original Dart files from the repository's root directory into the new `lib/` directory.
+
+You can do this manually using the VS Code file explorer.
+
+Your final source structure should look like this:
+
+```text
+Analitiki_Diadiktiou_Team91/
+├── lib/
+│   ├── main.dart
+│   ├── core.dart
+│   ├── components.dart
+│   ├── passport.dart
+│   ├── discover.dart
+│   ├── planner.dart
+│   └── community.dart
+├── web/
+├── pubspec.yaml
+├── README.md
+└── ... other generated Flutter files
+```
+
+All seven Dart files must be located inside the same `lib/` directory for the current project structure.
+
+**Do not delete or rename the existing Dart files.**
+
+---
+
+## 5. Install Project Dependencies
+
+From the project root directory, execute:
+
 ```bash
 flutter pub get
 ```
 
-### 3. Launch the Application
+This downloads the dependencies specified in `pubspec.yaml`.
 
-- **Run in Web (Recommended for quick evaluation):**
-  ```bash
-  flutter run -d chrome
-  ```
+The application is designed primarily around Flutter's built-in Material libraries.
 
-- **Run in Desktop (macOS / Windows / Linux):**
-  ```bash
-  flutter run -d macos    # Or: flutter run -d windows / linux
-  ```
-
-- **Run on Mobile Emulator/Device:**
-  ```bash
-  flutter run
-  ```
+If the source code requires additional third-party packages, those packages must also be added to `pubspec.yaml` before running the application.
 
 ---
 
-## Features Overview
+## 6. Run the Application
 
-1. **Passport (`passport.dart`):** Custom Canvas interactive world & Europe map highlighting visited, wishlisted, and planned destinations with visual stats. <img width="386" height="858" alt="image" src="https://github.com/user-attachments/assets/e67836b3-fa45-426b-a3da-1e3296d74670" />
+### Recommended — Run in Google Chrome
 
-2. **Discover (`discover.dart`):** Filterable destination grid with custom canvas artwork generation. <img width="381" height="855" alt="image" src="https://github.com/user-attachments/assets/2e2d360f-2e06-4cd5-9d9f-60f3c75395d6" />
+Make sure Chrome is installed.
 
-3. **Plan Trip (`planner.dart`):** Recommendation engine calculating budget, travel vibe, trip duration, and group style. <img width="383" height="858" alt="image" src="https://github.com/user-attachments/assets/f032144e-8c93-407f-afc2-3b0e766bf4e2" />  <img width="382" height="714" alt="image" src="https://github.com/user-attachments/assets/68b4892c-4c5f-4cb9-ac1d-00e321f3d16e" />
+Execute:
 
-4. **Community (`community.dart`):** Interactive feed allowing users to publish session-based travel stories. <img width="381" height="858" alt="image" src="https://github.com/user-attachments/assets/ea68cfb4-0df4-4f81-b642-fc9a54907a6a" />
+```bash
+flutter run -d chrome
+```
+
+Flutter will compile and launch the application in Chrome.
+
+The first launch may take longer because Flutter needs to generate and compile the required files.
+
+### Alternative — Run from VS Code
+
+1. Open the generated Flutter project in VS Code.
+2. Open `lib/main.dart`.
+3. Select **Chrome** as the target device.
+4. Press `F5` or select **Run > Start Debugging**.
+
+### Optional — Run on Android or Desktop
+
+If you want to run the application on Android, Windows, macOS, or Linux, additional platform-specific development tools may be required.
+
+Follow the relevant platform setup instructions:
+
+https://docs.flutter.dev/platform-integration
+
+You can generate additional platform directories using Flutter's project creation tools.
+
+For initial evaluation, **Chrome is strongly recommended**.
+
+---
+
+## 7. Troubleshooting
+
+### Problem: `flutter` command not found
+
+Flutter was not added to your system's PATH.
+
+**Solution:**
+
+- Restart VS Code and your terminal.
+- Make sure the Flutter SDK installation completed successfully.
+- Follow: https://docs.flutter.dev/install/add-to-path
+
+### Problem: `No pubspec.yaml file found`
+
+You are either running the command from the wrong directory or have not generated the Flutter project files.
+
+**Solution:**
+
+Navigate to the repository root and execute:
+
+```bash
+flutter create --project-name roam_app --platforms web .
+```
+
+Then:
+
+```bash
+flutter pub get
+```
+
+### Problem: Flutter displays its default counter application
+
+Flutter's generated `lib/main.dart` was not replaced with ROAM's original `main.dart`.
+
+**Solution:**
+
+Copy the repository's original `main.dart` into `lib/`, replacing the generated file.
+
+Make sure the other six Dart files are also inside `lib/`.
+
+### Problem: `Target of URI doesn't exist`
+
+One or more required Dart files may be missing, located in the wrong directory, or referenced incorrectly.
+
+**Solution:**
+
+Verify that all seven original Dart files are inside `lib/`.
+
+Also check whether any imported third-party packages need to be declared in `pubspec.yaml`.
+
+### Problem: Chrome is not detected
+
+Run:
+
+```bash
+flutter devices
+```
+
+Ensure Chrome is installed and correctly detected.
+
+For help, visit:
+
+https://docs.flutter.dev/platform-integration/web/setup
+
+### Problem: Dependencies or build errors
+
+Try:
+
+```bash
+flutter clean
+flutter pub get
+flutter run -d chrome
+```
+
+If an error persists, read the terminal output to identify missing packages, invalid imports, or other source-level issues.
+
+---
+
+## 8. Application Features
+
+### 🛂 Passport (`passport.dart`)
+
+Interactive world and Europe maps displaying visited, wishlisted, and planned destinations, along with travel statistics.
+
+### 🔎 Discover (`discover.dart`)
+
+Destination exploration with filtering options and custom visual artwork.
+
+### 🧳 Plan Trip (`planner.dart`)
+
+Travel recommendation system based on:
+
+- Available budget
+- Travel preferences and vibe
+- Trip duration
+- Group or travel style
+
+### 👥 Community (`community.dart`)
+
+Interactive feed where users can publish and explore travel stories during their application session.
+
+### Supporting Files
+
+- `main.dart` — application entry point
+- `core.dart` — core application logic
+- `components.dart` — reusable interface components
+
+---
+
+## 9. Quick Setup Summary
+
+For developers who already have Flutter and Git installed:
+
+```bash
+# Clone the repository
+git clone https://github.com/nikwilldoit/Analitiki_Diadiktiou_Team91.git
+
+# Enter the repository
+cd Analitiki_Diadiktiou_Team91
+
+# Generate Flutter project files
+flutter create --project-name roam_app --platforms web .
+```
+
+**Next, move all seven original `.dart` files into the generated `lib/` directory and replace the default `lib/main.dart`.**
+
+Finally, execute:
+
+```bash
+flutter pub get
+flutter run -d chrome
+```
+
+The ROAM application should now launch in Chrome, provided all required dependencies are available and the source code compiles successfully.
+
+---
+
+## 10. Additional Resources
+
+- [Flutter Official Documentation](https://docs.flutter.dev/)
+- [Flutter Installation Guide](https://docs.flutter.dev/install)
+- [Dart Documentation](https://dart.dev/guides)
+- [Flutter Web Setup](https://docs.flutter.dev/platform-integration/web/setup)
+- [VS Code Flutter Extension](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter)
+
+---
+
+**ROAM — Travel App Prototype**
+
+Developed as part of the Analitiki Diadiktiou Team 91 project.
