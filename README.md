@@ -2,9 +2,9 @@
 
 ROAM is a Flutter application designed for interactive travel tracking, trip planning based on budget and travel preferences, destination discovery, and community sharing.
 
-This repository contains the Dart source code for the application.
+This repository contains the Flutter project, including its Dart source code and web configuration.
 
-**Important:** The repository currently contains only the application's `.dart` files, not a complete Flutter project. Follow the instructions below to install Flutter, generate the required project structure, and run the application.
+**Important:** The repository already contains the Flutter project structure. You do not need to generate a new project or move any Dart files. Follow the instructions below to install Flutter, install dependencies, and run the application.
 
 ---
 
@@ -110,58 +110,9 @@ Alternatively, download the repository as a ZIP file from GitHub, extract it, an
 
 ---
 
-## 4. Generate the Flutter Project Structure
+## 4. Project Structure
 
-The GitHub repository currently contains only the following source files:
-
-```text
-Analitiki_Diadiktiou_Team91/
-├── README.md
-├── main.dart
-├── core.dart
-├── components.dart
-├── passport.dart
-├── discover.dart
-├── planner.dart
-└── community.dart
-```
-
-A complete Flutter project requires additional configuration files and directories.
-
-Fortunately, Flutter can generate these automatically.
-
-### Step 1 — Generate the missing files
-
-Inside the repository's root directory, run:
-
-```bash
-flutter create --project-name roam_app --platforms web .
-```
-
-**Important:** Include the final dot (`.`). It tells Flutter to generate the project files inside the current directory.
-
-This command creates the missing Flutter configuration, including:
-
-- `pubspec.yaml` — project dependencies and configuration
-- `lib/` — application source code
-- `web/` — files required for running in Chrome
-- `.dart_tool/` and other generated development files
-
-The `--project-name roam_app` option ensures that the generated Flutter project has a valid Dart package name.
-
-The `--platforms web` option generates only the web target, keeping the initial setup simple.
-
-### Step 2 — Move the existing Dart files into `lib/`
-
-After running the previous command, Flutter creates a `lib` directory containing a default `main.dart`.
-
-**Replace that generated `main.dart` with the one from the repository.**
-
-Move all seven original Dart files from the repository's root directory into the new `lib/` directory.
-
-You can do this manually using the VS Code file explorer.
-
-Your final source structure should look like this:
+The repository already contains the Flutter project structure:
 
 ```text
 Analitiki_Diadiktiou_Team91/
@@ -173,15 +124,19 @@ Analitiki_Diadiktiou_Team91/
 │   ├── discover.dart
 │   ├── planner.dart
 │   └── community.dart
+├── test/
 ├── web/
-├── pubspec.yaml
+├── .gitignore
+├── .metadata
 ├── README.md
-└── ... other generated Flutter files
+├── analysis_options.yaml
+├── pubspec.lock
+└── pubspec.yaml
 ```
 
-All seven Dart files must be located inside the same `lib/` directory for the current project structure.
+All application Dart files are already inside `lib/`, and `lib/main.dart` is the application entry point.
 
-**Do not delete or rename the existing Dart files.**
+**Do not run `flutter create`, move files, or replace `lib/main.dart`.** Continue directly to installing the dependencies in the next section.
 
 ---
 
@@ -219,7 +174,7 @@ The first launch may take longer because Flutter needs to generate and compile t
 
 ### Alternative — Run from VS Code
 
-1. Open the generated Flutter project in VS Code.
+1. Open the cloned repository folder in VS Code.
 2. Open `lib/main.dart`.
 3. Select **Chrome** as the target device.
 4. Press `F5` or select **Run > Start Debugging**.
@@ -252,17 +207,11 @@ Flutter was not added to your system's PATH.
 
 ### Problem: `No pubspec.yaml file found`
 
-You are either running the command from the wrong directory or have not generated the Flutter project files.
+You are running the command outside the Flutter project root.
 
 **Solution:**
 
-Navigate to the repository root and execute:
-
-```bash
-flutter create --project-name roam_app --platforms web .
-```
-
-Then:
+Navigate to the cloned `Analitiki_Diadiktiou_Team91` folder containing `pubspec.yaml` and run:
 
 ```bash
 flutter pub get
@@ -270,13 +219,9 @@ flutter pub get
 
 ### Problem: Flutter displays its default counter application
 
-Flutter's generated `lib/main.dart` was not replaced with ROAM's original `main.dart`.
+Make sure you opened the correct repository folder and are running its `lib/main.dart` entry point, not a separate Flutter project.
 
-**Solution:**
-
-Copy the repository's original `main.dart` into `lib/`, replacing the generated file.
-
-Make sure the other six Dart files are also inside `lib/`.
+---
 
 ### Problem: `Target of URI doesn't exist`
 
@@ -358,20 +303,14 @@ git clone https://github.com/nikwilldoit/Analitiki_Diadiktiou_Team91.git
 # Enter the repository
 cd Analitiki_Diadiktiou_Team91
 
-# Generate Flutter project files
-flutter create --project-name roam_app --platforms web .
-```
-
-**Next, move all seven original `.dart` files into the generated `lib/` directory and replace the default `lib/main.dart`.**
-
-Finally, execute:
-
-```bash
+# Install dependencies
 flutter pub get
+
+# Run in Chrome
 flutter run -d chrome
 ```
 
-The ROAM application should now launch in Chrome, provided all required dependencies are available and the source code compiles successfully.
+No project generation or file relocation is required. The ROAM application should now launch in Chrome, provided all required dependencies are available and the source code compiles successfully.
 
 ---
 
